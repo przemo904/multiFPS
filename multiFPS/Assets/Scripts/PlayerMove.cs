@@ -48,6 +48,13 @@ public class PlayerMove : MonoBehaviour {
             charController.Move(Vector3.down * charController.height / 2 * slopeForce * Time.deltaTime);
 
         }
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 100f)&& isJumping == false) { if (hit.distance > charController.height) {
+                Debug.Log("air");
+                charController.Move(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * Time.deltaTime * walkSpeed / 2);
+            } }
+
+
         SetMovementSpeed();
         JumpInput();
     }
@@ -87,10 +94,23 @@ public class PlayerMove : MonoBehaviour {
         charController.slopeLimit = 90.0f;
         float timeInAir = 0.0f;
 
+
         do
         {
+
+            float vertInput = Input.GetAxis(verticalInputName);
+            float horiInput = Input.GetAxis(horizontalInputName);
+
+            Vector3 forwardMovement = transform.forward * vertInput;
+            Vector3 rightMovement = transform.right * horiInput;
+
+
+
             float jumpForce = jumpFallOff.Evaluate(timeInAir);
             charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
+
+            charController.Move(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * Time.deltaTime * walkSpeed/2);
+
             timeInAir += Time.deltaTime;
 
             yield return null;
