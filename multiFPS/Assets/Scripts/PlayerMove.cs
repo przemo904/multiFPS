@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,14 +20,18 @@ public class PlayerMove : MonoBehaviour {
     [SerializeField] private float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
 
+    [SerializeField] private KeyCode crouchKey;
+    private bool isCrouching = false;
+
     private CharacterController charController;
     private bool isJumping;
-    
 
+    private float crouchingHeight;
 
     private void Awake()
     {
         charController = GetComponent<CharacterController>();
+        crouchingHeight = charController.height / 2;
     }
 
     void Update () {
@@ -57,7 +62,24 @@ public class PlayerMove : MonoBehaviour {
 
         SetMovementSpeed();
         JumpInput();
+        CrouchInput();
     }
+
+    private void CrouchInput()
+    {
+        if (Input.GetKeyDown(crouchKey) && !isCrouching) {
+            isCrouching = true;
+            charController.height = crouchingHeight;
+
+        }else if((Input.GetKeyDown(crouchKey) || Input.GetKeyDown(jumpKey)) && isCrouching)
+        {
+            charController.height = crouchingHeight * 2;
+            isCrouching = false;
+        }
+
+    }
+
+
 
     private bool onSlope() {
         if (isJumping) return false;
