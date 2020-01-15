@@ -8,7 +8,7 @@ public class GunScript : MonoBehaviour
     public float gunDamage = 100f;
     public Camera fpsCam;
     public float weaponRange = 50f;
-
+    
 
 
     // Start is called before the first frame update
@@ -28,6 +28,7 @@ public class GunScript : MonoBehaviour
     }
 
     private void Shoot() {
+        
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, weaponRange))
         {
