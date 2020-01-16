@@ -8,7 +8,7 @@ public class GunScript : MonoBehaviour
     public float gunDamage = 100f;
     public Camera fpsCam;
     public float weaponRange = 50f;
-    
+    public Animator animator;
 
 
     // Start is called before the first frame update
@@ -20,15 +20,18 @@ public class GunScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        animator.SetBool("shoot", false);
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
+
         }
 
     }
 
     private void Shoot() {
-        
+
+        animator.SetBool("shoot", true);
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, weaponRange))
         {
